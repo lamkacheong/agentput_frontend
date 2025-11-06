@@ -2,6 +2,7 @@
 
 import type { ToolMessage } from '@/lib/types';
 import { extractTaskResult } from '@/lib/utils/message-parser';
+import MarkdownContent, { isMarkdownContent } from '../MarkdownContent';
 
 interface TaskMessageProps {
   message: ToolMessage;
@@ -9,6 +10,7 @@ interface TaskMessageProps {
 
 export default function TaskMessage({ message }: TaskMessageProps) {
   const result = extractTaskResult(message);
+  const isMarkdown = result ? isMarkdownContent(result) : false;
 
   return (
     <div className="flex justify-start">
@@ -22,9 +24,15 @@ export default function TaskMessage({ message }: TaskMessageProps) {
           <div className="space-y-2 text-sm">
             <div>
               <span className="font-medium text-purple-700">执行结果:</span>
-              <pre className="mt-1 p-2 bg-white rounded text-xs overflow-x-auto max-h-60 overflow-y-auto border border-purple-100">
-                {result}
-              </pre>
+              {isMarkdown ? (
+                <div className="mt-1 p-2 bg-white rounded border border-purple-100 max-h-60 overflow-y-auto">
+                  <MarkdownContent content={result} />
+                </div>
+              ) : (
+                <pre className="mt-1 p-2 bg-white rounded text-xs overflow-x-auto max-h-60 overflow-y-auto border border-purple-100">
+                  {result}
+                </pre>
+              )}
             </div>
           </div>
         )}

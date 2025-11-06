@@ -1,2 +1,10 @@
 # Claude
 .claude/.idea/
+
+# Test directories
+test-sdk/
+
+# OpenAPI and temp files
+openapi.json
+USAGE.md
+tech_design.md

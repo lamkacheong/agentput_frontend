@@ -5,6 +5,7 @@ import type { AIMessage as AIMessageType, ToolMessage } from '@/lib/types';
 import { extractTodosFromAIMessage, extractTaskFromAIMessage } from '@/lib/utils/message-parser';
 import { extractTextContent } from '@/lib/utils/contentExtractor';
 import TodosMessage from './TodosMessage';
+import MarkdownContent, { isMarkdownContent } from '../MarkdownContent';
 
 interface AIMessageProps {
   message: AIMessageType;
@@ -26,6 +27,9 @@ export default function AIMessage({ message, toolResults }: AIMessageProps) {
   const hasToolCalls = (message.tool_calls && message.tool_calls.length > 0) || false;
   const showAIBox = textContent || (hasToolCalls && !textContent);
 
+  // 检测是否是 Markdown 内容
+  const isMarkdown = textContent ? isMarkdownContent(textContent) : false;
+
   return (
     <div className="flex justify-start">
       <div className="max-w-[70%]">
@@ -36,11 +40,21 @@ export default function AIMessage({ message, toolResults }: AIMessageProps) {
               <span className="text-lg">🤖</span>
               <span className="font-semibold text-sm text-gray-700">AI</span>
             </div>
-            <div className="whitespace-pre-wrap break-words text-gray-800">
-              {textContent || (hasToolCalls && (
-                <span className="text-gray-500 italic text-sm">正在执行操作...</span>
-              ))}
-            </div>
+            {textContent ? (
+              isMarkdown ? (
+                <div className="text-gray-800">
+                  <MarkdownContent content={textContent} />
+                </div>
+              ) : (
+                <div className="whitespace-pre-wrap break-words text-gray-800">
+                  {textContent}
+                </div>
+              )
+            ) : (
+              hasToolCalls && (
+                <div className="text-gray-500 italic text-sm">正在执行操作...</div>
+              )
+            )}
           </div>
         )}
 
