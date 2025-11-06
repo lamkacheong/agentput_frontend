@@ -72,3 +72,6 @@ http://localhost:2024/docs#tag/thread-runs/post/threads/{thread_id}/runs/stream
 https://docs.langchain.com/langsmith/use-stream-react.md
 这个文档说的方法来做前端的对接
 
+使用库@langchain/langgraph-sdk来开发
+@langchain/langgraph-sdk/react
+@langchain/langgraph-sdk
